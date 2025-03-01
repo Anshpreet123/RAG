@@ -1,3 +1,50 @@
+# version: '3.8'
+
+# services:
+#   db:
+#     image: ankane/pgvector:latest  # PostgreSQL with pgvector extension
+#     container_name: pgvector_db
+#     restart: always
+#     environment:
+#       POSTGRES_DB: rag_db
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: yourpassword
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - pgvector_data:/var/lib/postgresql/data
+#       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init script
+#     networks:
+#       - rag_network
+
+#   backend:
+#     build:
+#       context: .
+#       dockerfile: backend/Dockerfile
+#     container_name: rag_backend
+#     restart: always
+#     depends_on:
+#       - db
+#     environment:
+#       DB_NAME: rag_db
+#       DB_USER: postgres
+#       DB_PASSWORD: yourpassword
+#       DB_HOST: db 
+#       DB_PORT: 5432
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ./backend:/app
+#     networks:
+#       - rag_network
+
+# volumes:
+#   pgvector_data:
+
+# networks:
+#   rag_network:
+#     driver: bridge
+
 version: '3.8'
 
 services:
@@ -14,6 +61,49 @@ services:
     volumes:
       - pgvector_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init script
+    networks:
+      - rag_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: rag_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DB_NAME: rag_db
+      DB_USER: postgres
+      DB_PASSWORD: yourpassword
+      DB_HOST: db 
+      DB_PORT: 5432
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - rag_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rag_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"  # Match Vite default port
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - rag_network
 
 volumes:
   pgvector_data:
+
+networks:
+  rag_network:
+    driver: bridge

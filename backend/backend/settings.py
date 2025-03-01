@@ -1,8 +1,6 @@
-import os
+import os # Load environment variables from .env
 from dotenv import load_dotenv
-
-load_dotenv()  # Load environment variables from .env
-
+load_dotenv()
 
 from pathlib import Path
 
@@ -20,6 +18,8 @@ SECRET_KEY = 'django-insecure-374pl85w1gjh%*y8)01zu879mw3)tmp_^ntd_5i_kzls^8)q)x
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
