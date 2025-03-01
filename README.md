@@ -23,3 +23,15 @@ docker-compose up -d
 ```
 http://localhost:5173/
 ```
+
+### DEMO 
+
+
+<p align="center">
+
+  ![alt text](1.jpg)
+![alt text](2.jpg)
+![alt text](3.jpg) ![alt text](4.jpg) ![alt text](5.jpg)
+
+</p>
+
